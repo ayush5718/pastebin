@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
-import { getPaste } from '@/lib/db';
+import { getPaste, incrementViewCount } from '@/lib/db';
 import { isPasteAvailable } from '@/lib/paste';
+import { getCurrentTime } from '@/lib/utils';
 import { headers } from 'next/headers';
 
 export default async function PastePage({ params }: { params: { id: string } }) {
@@ -13,8 +14,18 @@ export default async function PastePage({ params }: { params: { id: string } }) 
   const testMode = process.env.TEST_MODE === '1';
   const headersList = headers();
   const testHeader = headersList.get('x-test-now-ms') || undefined;
+  const currentTime = getCurrentTime(testMode, testHeader);
 
   if (!isPasteAvailable(paste, testMode, testHeader)) {
+    notFound();
+  }
+
+  const updatedPaste = await incrementViewCount(params.id, currentTime);
+  if (!updatedPaste) {
+    notFound();
+  }
+
+  if (!isPasteAvailable(updatedPaste, testMode, testHeader)) {
     notFound();
   }
 
@@ -28,7 +39,7 @@ export default async function PastePage({ params }: { params: { id: string } }) 
         borderRadius: '4px',
         border: '1px solid #ddd'
       }}>
-        {paste.content}
+        {updatedPaste.content}
       </pre>
     </div>
   );
