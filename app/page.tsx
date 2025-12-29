@@ -36,7 +36,7 @@ export default function Home() {
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.error || 'Failed to create paste');
+        setError(data.error || 'Something went wrong, please try again');
         return;
       }
 
@@ -45,7 +45,7 @@ export default function Home() {
       setTtlSeconds('');
       setMaxViews('');
     } catch (err) {
-      setError('Network error. Please try again.');
+      setError('Network error, please try again');
     } finally {
       setLoading(false);
     }
@@ -58,7 +58,7 @@ export default function Home() {
       <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: '20px' }}>
           <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
-            Content *
+            Paste Content *
           </label>
           <textarea
             value={content}
@@ -78,7 +78,7 @@ export default function Home() {
 
         <div style={{ marginBottom: '20px' }}>
           <label style={{ display: 'block', marginBottom: '8px' }}>
-            TTL (seconds, optional)
+            Expires after (in seconds) - optional
           </label>
           <input
             type="number"
@@ -97,7 +97,7 @@ export default function Home() {
 
         <div style={{ marginBottom: '20px' }}>
           <label style={{ display: 'block', marginBottom: '8px' }}>
-            Max Views (optional)
+            Max views (optional)
           </label>
           <input
             type="number"
@@ -129,7 +129,7 @@ export default function Home() {
             opacity: loading ? 0.6 : 1
           }}
         >
-          {loading ? 'Creating...' : 'Create Paste'}
+          {loading ? 'Creating...' : 'Create paste'}
         </button>
       </form>
 
@@ -154,7 +154,7 @@ export default function Home() {
           border: '1px solid #cfc',
           borderRadius: '4px'
         }}>
-          <p style={{ margin: '0 0 8px 0', fontWeight: 'bold' }}>Paste created!</p>
+          <p style={{ margin: '0 0 8px 0', fontWeight: 'bold' }}>Paste created successfully!</p>
           <p style={{ margin: '0 0 8px 0' }}>
             <a href={result.url} style={{ color: '#0070f3' }}>
               {result.url}
@@ -171,7 +171,7 @@ export default function Home() {
               cursor: 'pointer'
             }}
           >
-            Copy URL
+            Copy link
           </button>
         </div>
       )}
